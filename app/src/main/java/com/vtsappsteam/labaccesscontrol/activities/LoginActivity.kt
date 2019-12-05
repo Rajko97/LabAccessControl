@@ -1,9 +1,9 @@
-package com.vtsappsteam.labaccesscontrol
+package com.vtsappsteam.labaccesscontrol.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class StartActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
