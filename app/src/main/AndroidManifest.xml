@@ -9,9 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.WaitActiveActivity"/>
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.MainActivity" />
         <activity
             android:name=".activities.StartActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
@@ -21,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity android:name=".activities.WaitActiveActivity"/>
+        <activity android:name=".activities.MainActivity" />
+
     </application>
 
 </manifest>

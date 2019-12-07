@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lab Access Control</string>
+    <string name="tvLogin">Prijavi se</string>
+    <string name="inputUserName">Korisničko ime</string>
+    <string name="inputPassword">Lozinka</string>
+    <!--&#xFE0E; iskljucuje unicode-emoji replacement-->
+    <!--\u25B6 je ▶ -->
+    <string name="btnLogIn">Prijavi se  \u25B6&#xFE0E; </string>
+</resources>

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Lab Access Control</string>
+    <string name="tvLogin">Sign in</string>
+    <string name="inputUserName">username</string>
+    <string name="inputPassword">password</string>
+    <!--&#xFE0E; disables unicode-emoji replacement-->
+    <!--\u25B6 equals ▶ -->
+    <string name="btnLogIn">Sign in  \u25B6&#xFE0E; </string>
 </resources>
