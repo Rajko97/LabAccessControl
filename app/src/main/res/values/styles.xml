@@ -16,4 +16,10 @@
         <item name="colorAccent" >@color/colorAccent</item>
     </style>
 
+    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="colorControlActivated">#0c7fcc</item>
+        <item name="android:textColorHint">#464646</item>
+
+    </style>
+
 </resources>

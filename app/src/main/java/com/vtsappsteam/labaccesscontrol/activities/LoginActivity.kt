@@ -1,5 +1,6 @@
 package com.vtsappsteam.labaccesscontrol.activities
 
+import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
         if(inputUsername.text.toString().trim().isEmpty())
         {
             val s = SpannableString("* Polje za korisničko ime ne sme biti prazno!")
-            s.setSpan(TypefaceSpan(Typeface.createFromAsset(assets, "exo.ttf")), 0, s.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            s.setSpan(TypefaceSpan(Typeface.createFromAsset(assets, "exo.ttf"), Color.parseColor("#b20000")), 0, s.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             textInputLayout1.error = s
             inputUsername.requestFocus()
              return false
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         if(inputPassword.text.toString().trim().isEmpty())
         {
             val s = SpannableString("* Polje za lozinku ne sme biti prazno!")
-            s.setSpan(TypefaceSpan(Typeface.createFromAsset(assets, "exo.ttf")), 0, s.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            s.setSpan(TypefaceSpan(Typeface.createFromAsset(assets, "exo.ttf"), Color.parseColor("#b20000")), 0, s.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             textInputLayout2.error = s
             return false
         }
@@ -54,10 +55,8 @@ class LoginActivity : AppCompatActivity() {
         btnSingUp.typeface = typeface
         textInputLayout1.typeface = typeface
         textInputLayout2.typeface = typeface
-        textInputLayout1.setDrawable1(resources.getDrawable(R.drawable.input_style_username, applicationContext.theme))
-        textInputLayout1.setDrawable2(resources.getDrawable(R.drawable.input_style_username, applicationContext.theme))
-        textInputLayout2.setDrawable1(resources.getDrawable(R.drawable.input_style_password, applicationContext.theme))
-        textInputLayout2.setDrawable2(resources.getDrawable(R.drawable.input_style_password, applicationContext.theme))
+        textInputLayout1.setDrawable(resources.getDrawable(R.drawable.input_style_username, applicationContext.theme))
+        textInputLayout2.setDrawable(resources.getDrawable(R.drawable.input_style_password, applicationContext.theme))
         mainLayout.requestFocus()
     }
 }
