@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lab Access Control</string>
+    <!--====                        Login Activity                                 ====-->
+    <!-- View -->
     <string name="tvLogin">Prijavi se</string>
     <string name="inputUserName">Korisničko ime</string>
     <string name="inputPassword">Lozinka</string>
     <!--&#xFE0E; iskljucuje unicode-emoji replacement-->
     <!--\u25B6 je ▶ -->
     <string name="btnLogIn">Prijavi se  \u25B6&#xFE0E; </string>
+
+    <!-- Toast -->
+    <string name="error_server_unavailable">Server trenutno nije dostupan, pokušajte kasnije.</string>
+    <string name="error_error">Proverite sva polja!</string>
+
+    <!-- TextInputLayout error -->
+    <string name="error_username_notfound">Korisničko ime ne postoji</string>
+    <string name="error_wrong_password">Pogrešna lozinka</string>
+    <string name="error_username_empty">* Polje ne sme biti prazno!</string>
+    <string name="error_username_blank">* Polje ne sme da sadrži blanko znak!</string>
+    <string name="error_username_dot_format">* Polje mora biti u formatu: ime.prezime!</string>
+    <string name="error_password_empty">* Polje ne sme biti prazno!</string>
+    <string name="error_password_blank">* Polje ne sme da sadrži blanko znak!</string>
+
+    <!--====                         Dialogs                                      ====-->
+    <string name="dialog_title_no_connection">Nema konekcije</string>
+    <string name="dialog_text_no_internet">Aplikacija zahteva internet konekciju. Uključite WiFi ili mobilne podatke</string>
+    <string name="dialog_button_settings">Otvori podešavanja</string>
+    <string name="dialog_button_quit">Napusti aplikaciju</string>
+    <string name="dialog_title_mac_notfound">MAC Adresa</string>
+    <string name="dialog_text_no_mac">Nismo uspeli da pribavimo MAC adresu vašeg uređaja. Vreme je da ažurirate aplikaciju</string>
+    <string name="dialog_login_wait">Autorizacija korisnika, molimo sačekajte…</string>
 </resources>

@@ -2,9 +2,16 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/themeBackgroundColor</item>
+        <item name="colorPrimaryDark">@color/themeBackgroundColor</item>
+        <item name="colorAccent">@color/themeTextBlue</item>
+    </style>
+
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/themeBackgroundColor</item>
+        <item name="colorAccent">@color/themeTextBlue</item>
+        <item name="android:fontFamily">@font/exo</item>
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -13,13 +20,12 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="colorAccent" >@color/colorAccent</item>
     </style>
 
-    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
-        <item name="colorControlActivated">#0c7fcc</item>
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="colorControlActivated">@color/themeTextBlue</item>
         <item name="android:textColorHint">#464646</item>
-
+        <item name="android:textColorLink">#fff</item>
+        <item name="android:fontFamily">@font/exo</item>
     </style>
-
 </resources>
