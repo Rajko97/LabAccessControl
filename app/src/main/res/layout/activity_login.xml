@@ -66,7 +66,7 @@
                 app:errorTextAppearance="@style/hint_error_appearance"
                 tools:layout_marginBottom="20dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.vtsappsteam.labaccesscontrol.widgets.TextInputEditText
                     android:id="@+id/inputUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                     android:inputType="text"
                     android:minHeight="57dp"
                     android:paddingStart="10dp"
-                    android:paddingTop="4dp"
+                    android:paddingBottom="10dp"
                     android:singleLine="true"
                     android:text="@={viewModel.editUsernameContent}"
                     android:textColor="@android:color/black"
@@ -95,7 +95,7 @@
                 app:errorEnabled="true"
                 app:setErrorMessage="@{viewModel.textErrorPassword}"
                 tools:layout_marginBottom="20dp">
-                <com.google.android.material.textfield.TextInputEditText
+                <com.vtsappsteam.labaccesscontrol.widgets.TextInputEditText
                     android:id="@+id/inputPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                     android:text="@={viewModel.editPasswordContent}"
                     android:inputType="textPassword"
                     android:paddingStart="10dp"
-                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp"
                     android:layout_marginBottom="-15dp"
                     android:singleLine="true"
                     android:minHeight="57dp"

@@ -10,10 +10,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.utils.TypefaceSpan
 
-class TextInputLayout : TextInputLayout{
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs : AttributeSet) : super (context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr : Int) : super(context, attrs, defStyleAttr)
+class TextInputLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_FilledBox_Dense
+) : TextInputLayout(context, attrs, defStyleAttr) {
 
     init {
         typeface = ResourcesCompat.getFont(context, R.font.exo_medium)
