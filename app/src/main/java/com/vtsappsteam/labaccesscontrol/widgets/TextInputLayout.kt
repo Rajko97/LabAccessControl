@@ -22,7 +22,7 @@ class TextInputLayout : TextInputLayout{
     override fun setError(errorText: CharSequence?) {
         if(errorText != null) {
             val coloredErrorText = SpannableString(errorText)
-            coloredErrorText.setSpan(TypefaceSpan(ResourcesCompat.getFont(context, R.font.exo_medium), Color.parseColor("#b20000")),
+            coloredErrorText.setSpan(TypefaceSpan(ResourcesCompat.getFont(context, R.font.exo_default), Color.parseColor("#b20000")),
                 0,
                 coloredErrorText.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

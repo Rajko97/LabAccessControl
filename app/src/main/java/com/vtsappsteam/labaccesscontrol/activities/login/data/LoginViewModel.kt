@@ -2,10 +2,12 @@ package com.vtsappsteam.labaccesscontrol.activities.login.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import org.json.JSONObject
+
 
 class LoginViewModel : ViewModel() {
     val editUsernameContent = MutableLiveData<String>("")
@@ -22,7 +24,27 @@ class LoginViewModel : ViewModel() {
     val editUsernameFocus : LiveData<Boolean> = _usernameFocus
     val editPasswordFocus : LiveData<Boolean> = _passwordFocus
 
-    fun validateUsername(): Boolean {
+    private val usernameObserver : Observer<String> = Observer { validateUsername() }
+    private val passwordObserver: Observer<String> = Observer { validatePassword() }
+
+    override fun onCleared() {
+        super.onCleared()
+        editUsernameContent.removeObserver(usernameObserver)
+        editPasswordContent.removeObserver(passwordObserver)
+    }
+
+    //Additional function which sets observer if data is invalid
+    //Observer check for validation
+    //Result: When user make mistake for first time, it will always show how to set input correctly
+    fun validateUsername() : Boolean {
+        val valid = doUsernameValidation()
+        if (valid.not()) {
+            editUsernameContent.observeForever(usernameObserver)
+        }
+        return valid
+    }
+
+    private fun doUsernameValidation(): Boolean {
         _textErrorUsername.postValue(null)
         editUsernameContent.value.let { username ->
             if (username == null || username.isEmpty()) {
@@ -47,7 +69,15 @@ class LoginViewModel : ViewModel() {
             _usernameFocus.value = _usernameFocus.value?.not()
     }
 
-    fun validatePassword(): Boolean {
+    fun validatePassword() : Boolean {
+        val valid = doPasswordValidation()
+        if(valid.not()) {
+            editPasswordContent.observeForever(passwordObserver)
+        }
+        return valid
+    }
+
+    private fun doPasswordValidation(): Boolean {
         _textErrorPassword.postValue(null)
         editPasswordContent.value.let { password ->
             if (password == null || password.isEmpty()) {
@@ -59,7 +89,7 @@ class LoginViewModel : ViewModel() {
                 return false
             }
         }
-        _textErrorUsername.postValue(null)
+        _textErrorPassword.postValue(null)
         return true
     }
 

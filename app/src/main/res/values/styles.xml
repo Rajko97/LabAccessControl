@@ -28,4 +28,8 @@
         <item name="android:textColorLink">#fff</item>
         <item name="android:fontFamily">@font/exo</item>
     </style>
+    <style name="hint_error_appearance"  parent="@android:style/TextAppearance">
+        <item name="android:textColor">#f00</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
