@@ -1,18 +1,16 @@
 package com.vtsappsteam.labaccesscontrol.widgets
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Point
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewParent
 import com.google.android.material.textfield.TextInputEditText
 
 class TextInputEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    @SuppressLint("PrivateResource") defStyleAttr: Int = android.R.attr.editTextStyle)
+    defStyleAttr: Int = android.R.attr.editTextStyle)
     : TextInputEditText(context, attrs, defStyleAttr) {
 
     private val parentRect = Rect()
@@ -20,7 +18,7 @@ class TextInputEditText @JvmOverloads constructor(
     override fun getFocusedRect(rect: Rect?) {
         super.getFocusedRect(rect)
         rect?.let {
-            getMyParent().getFocusedRect(parentRect)
+            getTextInputLayout()?.getFocusedRect(parentRect)
             rect.bottom = parentRect.bottom
         }
     }
@@ -28,7 +26,7 @@ class TextInputEditText @JvmOverloads constructor(
     override fun getGlobalVisibleRect(rect: Rect?, globalOffset: Point?): Boolean {
         val result = super.getGlobalVisibleRect(rect, globalOffset)
         rect?.let {
-            getMyParent().getGlobalVisibleRect(parentRect, globalOffset)
+            getTextInputLayout()?.getGlobalVisibleRect(parentRect, globalOffset)
             rect.bottom = parentRect.bottom
         }
         return result
@@ -36,18 +34,21 @@ class TextInputEditText @JvmOverloads constructor(
 
     override fun requestRectangleOnScreen(rect: Rect?): Boolean {
         val result = super.requestRectangleOnScreen(rect)
-        val parent = getMyParent()
+        val parent = getTextInputLayout()
         // 10 is a random magic number to define a rectangle height.
-        parentRect.set(0, parent.height - 10, parent.right, parent.height)
-        parent.requestRectangleOnScreen(parentRect, true /*immediate*/)
+        parentRect.set(0, parent?.height ?: 10 - 24, parent?.right ?: 0, parent?.height?: 0)
+        parent?.requestRectangleOnScreen(parentRect, true /*immediate*/)
         return result
     }
 
-    private fun getMyParent(): View {
-        var myParent: ViewParent? = parent
-        while (myParent !is TextInputLayout && myParent != null) {
-            myParent = myParent.parent
+    private fun getTextInputLayout(): TextInputLayout? {
+        var parent = parent
+        while (parent is View) {
+            if (parent is TextInputLayout) {
+                return parent
+            }
+            parent = parent.getParent()
         }
-        return if (myParent == null) this else myParent as View
+        return null
     }
 }
