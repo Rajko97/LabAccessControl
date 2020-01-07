@@ -12,6 +12,7 @@
         <item name="colorPrimaryDark">@color/themeBackgroundColor</item>
         <item name="colorAccent">@color/themeTextBlue</item>
         <item name="android:fontFamily">@font/exo</item>
+        <item name="colorControlHighlight">@color/btnRipple</item>
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">

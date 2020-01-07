@@ -36,7 +36,7 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
 
     companion object {
         private const val defaultMac : String = "02:00:00:00:00:00"
-        private var isConnected : Boolean = false
+        private var isConnected : Boolean = true
         private var macAddress : String =
             defaultMac
 

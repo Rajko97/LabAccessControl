@@ -62,7 +62,7 @@
                 android:text="@string/dialog_button_quit"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:background="@drawable/button_login_selector"
+                android:background="@drawable/button_ripple"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:fontFamily="@font/exo_medium"
                 android:layout_marginEnd="10dp"/>
@@ -74,7 +74,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/dialog_button_settings"
-                android:background="@drawable/button_login_selector"
+                android:background="@drawable/button_ripple"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
