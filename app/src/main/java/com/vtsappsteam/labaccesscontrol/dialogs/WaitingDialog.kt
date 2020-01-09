@@ -2,24 +2,20 @@ package com.vtsappsteam.labaccesscontrol.dialogs
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 
-
-class WaitingDialog : Dialog {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, themeResId: Int) : super(context, themeResId)
-    constructor(context: Context, cancelable: Boolean, cancelListener: DialogInterface.OnCancelListener?) : super (context, cancelable, cancelListener)
-
+class WaitingDialog(context: Context) : Dialog(context){
     init {
         setContentView(R.layout.dialog_progress)
         setCancelable(false)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        /*val layoutParams: WindowManager.LayoutParams = window!!.attributes
+        /*
+        val layoutParams: WindowManager.LayoutParams = window!!.attributes
         layoutParams.gravity = Gravity.CENTER// or Gravity.LEFT
         //layoutParams.x = 30
         //layoutParams.y = -120
@@ -33,7 +29,20 @@ class WaitingDialog : Dialog {
         dialogShowedAt = System.currentTimeMillis()
     }
 
-    fun delayTime(): Long? {
+    fun delayAndHide(runnable: Runnable) {
+
+        val delayTime: Long? = delayTime()
+        if (delayTime != null) {
+            val handler = Handler()
+            handler.postDelayed(runnable, delayTime)
+            handler.postDelayed({hide()}, delayTime)
+        } else {
+            runnable.run()
+            hide()
+        }
+    }
+
+    private fun delayTime(): Long? {
         val currentTime = System.currentTimeMillis()
         val timeWhenDialogShouldDisappears = dialogShowedAt+Constants.DIALOG_MINIMUM_CLOSE_TIME
         return if (timeWhenDialogShouldDisappears > currentTime) {

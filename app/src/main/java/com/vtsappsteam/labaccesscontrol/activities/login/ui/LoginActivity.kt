@@ -7,8 +7,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import android.transition.Fade
+import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.vtsappsteam.labaccesscontrol.R
@@ -38,11 +41,21 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeNoActionBar)
         super.onCreate(savedInstanceState)
-        val mBinding : ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        mBinding.lifecycleOwner = this
-        mBinding.activity = this
-        mBinding.viewModel = viewModel
-        mBinding.mainLayout.requestFocus()
+
+        val decor = window.decorView
+        window.enterTransition = null
+        Fade().run {
+            excludeTarget(decor.findViewById<View>(R.id.action_bar_container), true)
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
+        }
+
+         (DataBindingUtil.setContentView(this, R.layout.activity_login) as ActivityLoginBinding).run {
+            lifecycleOwner = this@LoginActivity
+            activity = this@LoginActivity
+            viewModel = this@LoginActivity.viewModel
+            mainLayout.requestFocus()
+        }
 
         adMacProblem = alertDialogNet(this, resources.getString(R.string.dialog_title_mac_notfound), resources.getString(R.string.dialog_text_no_mac))
         adNoInternetConnection = alertDialogNet(this, null, null)
@@ -59,29 +72,37 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
     }
 
     override fun successResponse(res: JSONObject) {
-        progressBar.hide()
-        val sp = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
-        val edit = sp.edit()
-        edit.putString("username", res.getString("username"))
-        edit.putString("firstName", res.getString("name"))
-        edit.putString("lastName", res.getString("lastName"))
-        edit.putString("rank", res.getString("rank"))
-        edit.putString("routerMAC", res.getString("samsungAppsLabRouterMacAddress"))
-        edit.putString("uniqueToken", res.getString("uniqueToken"))
-        edit.putString("doorPermission", res.getBoolean("doorPermission").toString())
-        edit.apply()
+        progressBar.delayAndHide(Runnable {
+            window.exitTransition = null
+             getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().apply {
+                putString("username", res.getString("username"))
+                putString("firstName", res.getString("name"))
+                putString("lastName", res.getString("lastName"))
+                putString("rank", res.getString("rank"))
+                putString("routerMAC", res.getString("samsungAppsLabRouterMacAddress"))
+                putString("uniqueToken", res.getString("uniqueToken"))
+                putString("doorPermission", res.getBoolean("doorPermission").toString())
+                apply()
+            }
 
-        startActivity(
-            Intent(
-                this,
-                if (res.getBoolean("doorPermission")) MainActivity::class.java else WaitActiveActivity::class.java
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                logoHeader,
+                ViewCompat.getTransitionName(logoHeader)!!
             )
-        )
-        finish()
+
+            startActivity(
+                Intent(
+                    this,
+                    if (res.getBoolean("doorPermission")) MainActivity::class.java else WaitActiveActivity::class.java
+                ),
+                options.toBundle()
+            )
+            finish()
+        })
     }
 
     override fun errorResponse(statusCode : Int, message: String) {
-        val runnable = Runnable {
+        progressBar.delayAndHide(Runnable {
             btnSingUp.isEnabled = true
             val errorMessage : String = when (statusCode) {
                 401 -> {
@@ -95,17 +116,8 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
                 503 -> getString(R.string.error_server_unavailable)
                 else -> message
             }
-            progressBar.hide()
             Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
-        }
-
-        val delayTime: Long? = progressBar.delayTime()
-        if (delayTime != null) {
-            val handler = Handler()
-            handler.postDelayed(runnable, delayTime)
-        } else {
-            runnable.run()
-        }
+        })
     }
 
     override fun onStop() {

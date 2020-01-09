@@ -13,6 +13,7 @@
         <item name="colorAccent">@color/themeTextBlue</item>
         <item name="android:fontFamily">@font/exo</item>
         <item name="colorControlHighlight">@color/btnRipple</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -21,6 +22,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
