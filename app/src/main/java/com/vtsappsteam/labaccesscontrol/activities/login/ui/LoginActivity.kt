@@ -24,6 +24,7 @@ import com.vtsappsteam.labaccesscontrol.activities.login.data.LoginViewModel
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver.Companion.alertDialogNet
 import com.vtsappsteam.labaccesscontrol.dialogs.WaitingDialog
+import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 import com.vtsappsteam.labaccesscontrol.utils.Constants.Companion.API_ROUTE_LOGIN
 import kotlinx.android.synthetic.main.activity_login.*
@@ -81,9 +82,13 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
                 putString("rank", res.getString("rank"))
                 putString("routerMAC", res.getString("samsungAppsLabRouterMacAddress"))
                 putString("uniqueToken", res.getString("uniqueToken"))
-                putString("doorPermission", res.getBoolean("doorPermission").toString())
                 apply()
             }
+
+            applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).
+                edit().putString("doorPermission", res.getBoolean("doorPermission").toString()).apply()
+
+            FirebaseMessagingService.enableFCM()
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                 logoHeader,
