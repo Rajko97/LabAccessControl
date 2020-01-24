@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
@@ -33,7 +34,17 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun lunchActivity(activity: Class<out AppCompatActivity>) {
-        startActivity(Intent(this@StartActivity, activity).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        startActivity(Intent(this@StartActivity, activity).clearStack(isNotificationIntent()))
         finish()
+    }
+
+    private fun isNotificationIntent() : Boolean {
+        return intent.getBooleanExtra("isNotificationIntent", false)
+    }
+
+    private fun Intent.clearStack(shouldClear : Boolean) : Intent {
+        if (shouldClear)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        return this
     }
 }

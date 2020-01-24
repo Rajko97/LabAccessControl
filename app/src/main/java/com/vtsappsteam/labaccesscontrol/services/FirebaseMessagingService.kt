@@ -18,16 +18,14 @@ class FirebaseMessagingService : FirebaseMessagingService(), Responsable {
 
     override fun onMessageReceived(remoteMessage : RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
-            val access = remoteMessage.data["access"]
-            if (access != null) {
-                if(access == "true") {
-                    Notifications.displayNotification(applicationContext)
-                    applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().putString("doorPermission", "true").apply()
-                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent().apply {
-                        putExtra("message", access)
-                        action = "ACTION_WAIT_ADMIN"
-                    })
-                }
+            remoteMessage.data["access"]?.let {
+                Notifications.displayNotification(applicationContext)
+                applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+                    .edit().putString("doorPermission", it).apply()
+                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent().apply {
+                    putExtra("doorPermission", it)
+                    action = "ACTION_WAIT_ADMIN"
+                })
             }
         }
         /*

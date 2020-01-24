@@ -28,27 +28,28 @@ class WaitActiveActivity : AppCompatActivity(), Responsable {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val message = intent.getStringExtra("message")
-            if(message != null && message == "true") {
-                this@WaitActiveActivity.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
-                    .edit()
-                    .putString("doorPermission", "true")
-                    .apply()
+            intent.getStringExtra("doorPermission").let { message ->
+                if(message != null && message == "true") {
+                    this@WaitActiveActivity.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("doorPermission", message)
+                        .apply()
+                }
+                startActivity(Intent(this@WaitActiveActivity, MainActivity::class.java))
+                finish()
             }
-            startActivity(Intent(this@WaitActiveActivity, MainActivity::class.java))
-            finish()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         LocalBroadcastManager.
             getInstance(this@WaitActiveActivity)
             .registerReceiver(broadcastReceiver, IntentFilter("ACTION_WAIT_ADMIN"))
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         LocalBroadcastManager.getInstance(this@WaitActiveActivity).unregisterReceiver(broadcastReceiver)
     }
 
@@ -99,6 +100,7 @@ class WaitActiveActivity : AppCompatActivity(), Responsable {
 
     private fun logOut() {
         getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
+        applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         window.exitTransition = null
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logoImage,
             ViewCompat.getTransitionName(logoImage)!!

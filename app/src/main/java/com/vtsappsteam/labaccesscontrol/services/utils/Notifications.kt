@@ -19,21 +19,18 @@ class Notifications {
         fun displayNotification(applicationContext : Context) {
             createNotificationChannel(applicationContext)
 
-            val resultIntent = Intent(applicationContext, StartActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(applicationContext, 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-            val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
+            NotificationManagerCompat.from(applicationContext).notify(NOTIFICATION_ID, (NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
                 setSmallIcon(R.mipmap.ic_launcher)
                 setContentTitle(applicationContext.getString(R.string.notification_title))
                 setContentText(applicationContext.getString(R.string.notification_device_approved))
-                priority = NotificationCompat.PRIORITY_HIGH
+                priority = NotificationCompat.PRIORITY_DEFAULT
                 setAutoCancel(true)
-                setContentIntent(pendingIntent)
+                setContentIntent(PendingIntent.getActivity(applicationContext, 1, Intent(applicationContext, StartActivity::class.java).putExtra("isNotificationIntent", true), PendingIntent.FLAG_UPDATE_CURRENT))
+            }).build())
+        }
 
-            }
-
-            val notificationManager = NotificationManagerCompat.from(applicationContext)
-            notificationManager.notify(NOTIFICATION_ID, builder.build())
+        fun cancelApprovedDeviceNotification(context: Context) {
+            (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(NOTIFICATION_ID)
         }
 
         private fun createNotificationChannel(applicationContext: Context) {

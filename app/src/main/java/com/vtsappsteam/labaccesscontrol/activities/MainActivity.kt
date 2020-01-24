@@ -11,12 +11,14 @@ import androidx.core.view.ViewCompat
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
+import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 import kotlinx.android.synthetic.main.wait_active_activity.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Notifications.cancelApprovedDeviceNotification(this)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.wait_active_menu, menu)
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun logOut() {
         getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
+        applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
        /* window.exitTransition = null
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logoImage,
             ViewCompat.getTransitionName(logoImage)!!

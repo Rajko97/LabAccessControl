@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Handler
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 
@@ -29,20 +28,7 @@ class WaitingDialog(context: Context) : Dialog(context){
         dialogShowedAt = System.currentTimeMillis()
     }
 
-    fun delayAndHide(runnable: Runnable) {
-
-        val delayTime: Long? = delayTime()
-        if (delayTime != null) {
-            val handler = Handler()
-            handler.postDelayed(runnable, delayTime)
-            handler.postDelayed({hide()}, delayTime)
-        } else {
-            runnable.run()
-            hide()
-        }
-    }
-
-    private fun delayTime(): Long? {
+    fun delayTime(): Long? {
         val currentTime = System.currentTimeMillis()
         val timeWhenDialogShouldDisappears = dialogShowedAt+Constants.DIALOG_MINIMUM_CLOSE_TIME
         return if (timeWhenDialogShouldDisappears > currentTime) {

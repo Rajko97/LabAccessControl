@@ -28,6 +28,10 @@ import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 import com.vtsappsteam.labaccesscontrol.utils.Constants.Companion.API_ROUTE_LOGIN
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 import org.json.JSONObject
 
@@ -73,7 +77,8 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
     }
 
     override fun successResponse(res: JSONObject) {
-        progressBar.delayAndHide(Runnable {
+        CoroutineScope(Dispatchers.Main).launch {
+            progressBar.delayTime()?.let { delay(it) }
             window.exitTransition = null
              getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().apply {
                 putString("username", res.getString("username"))
@@ -90,24 +95,25 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
 
             FirebaseMessagingService.enableFCM()
 
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@LoginActivity,
                 logoHeader,
                 ViewCompat.getTransitionName(logoHeader)!!
             )
 
             startActivity(
                 Intent(
-                    this,
+                    this@LoginActivity,
                     if (res.getBoolean("doorPermission")) MainActivity::class.java else WaitActiveActivity::class.java
                 ),
                 options.toBundle()
             )
             finish()
-        })
+        }
     }
 
     override fun errorResponse(statusCode : Int, message: String) {
-        progressBar.delayAndHide(Runnable {
+        CoroutineScope(Dispatchers.Main).launch {
+            progressBar.delayTime()?.let { delay(it) }
             btnSingUp.isEnabled = true
             val errorMessage : String = when (statusCode) {
                 401 -> {
@@ -121,8 +127,9 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
                 503 -> getString(R.string.error_server_unavailable)
                 else -> message
             }
+            progressBar.hide()
             Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
-        })
+        }
     }
 
     override fun onStop() {
