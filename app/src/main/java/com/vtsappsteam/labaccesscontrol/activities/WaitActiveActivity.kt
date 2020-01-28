@@ -20,7 +20,7 @@ import com.vtsappsteam.labaccesscontrol.http.Responsable
 import com.vtsappsteam.labaccesscontrol.http.VolleyService
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
-import kotlinx.android.synthetic.main.wait_active_activity.*
+import kotlinx.android.synthetic.main.activity_wait_approval.*
 import org.json.JSONObject
 
 
@@ -56,7 +56,7 @@ class WaitActiveActivity : AppCompatActivity(), Responsable {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeNoActionBar)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.wait_active_activity)
+        setContentView(R.layout.activity_wait_approval)
 
         setSupportActionBar(appToolbar)
 

@@ -19,13 +19,16 @@ class FirebaseMessagingService : FirebaseMessagingService(), Responsable {
     override fun onMessageReceived(remoteMessage : RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
             remoteMessage.data["access"]?.let {
-                Notifications.displayNotification(applicationContext)
+                Notifications.displayNotification(applicationContext, Notifications.NotificationID.NOTIF_MAC_APPROVED)
                 applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
                     .edit().putString("doorPermission", it).apply()
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent().apply {
                     putExtra("doorPermission", it)
                     action = "ACTION_WAIT_ADMIN"
                 })
+            }
+            remoteMessage.data["deviceRequest"]?.let {
+                Notifications.displayNotification(applicationContext, Notifications.NotificationID.NOTIF_MAC_REJECTED)
             }
         }
         /*

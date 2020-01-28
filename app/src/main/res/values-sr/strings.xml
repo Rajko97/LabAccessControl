@@ -31,6 +31,10 @@
     <string name="dialog_title_mac_notfound">MAC Adresa</string>
     <string name="dialog_text_no_mac">Nismo uspeli da pribavimo MAC adresu vašeg uređaja. Vreme je da ažurirate aplikaciju</string>
     <string name="dialog_login_wait">Autorizacija korisnika, molimo sačekajte…</string>
+
+    <!--====                         Notifikacije                                      ====-->
     <string name="notification_title">VTŠ Apps Team</string>
     <string name="notification_device_approved">Vaš uređaj je odobren. Možete da koristite aplikaciju.</string>
+    <string name="notification_name_mac_change">Promena uređaja</string>
+    <string name="notification_desc_mac_change">Obavesti me kada administrator odobri moj uređaj</string>
 </resources>

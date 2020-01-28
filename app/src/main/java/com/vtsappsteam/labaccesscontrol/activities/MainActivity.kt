@@ -6,20 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
-import kotlinx.android.synthetic.main.wait_active_activity.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Notifications.cancelApprovedDeviceNotification(this)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.wait_active_menu, menu)
         return super.onCreateOptionsMenu(menu)

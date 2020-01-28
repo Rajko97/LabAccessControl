@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
+import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 
 class StartActivity : AppCompatActivity() {
