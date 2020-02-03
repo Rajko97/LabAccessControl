@@ -23,6 +23,15 @@
     <string name="error_password_empty">* Field cant\'t be empty!</string>
     <string name="error_password_blank">* Field can\'t contain blank characters!</string>
 
+    <!--     Fragment Wait Approval        -->
+    <string name="device_approval">Device approval</string>
+    <string name="device_approval_desc">You have signed in from a new device. You need to wait for the admin approval</string>
+    <string name="progress_desc_contacting">Contacting server…</string>
+    <string name="progress_desc_waiting">Waiting for approval…</string>
+    <string name="progress_desc_approved">Your device is approved</string>
+    <string name="fragment_approval_continue">Continue ▶︎</string>
+    <string name="fragment_approval_cancel">◀︎ Cancel</string>
+
     <!--====                         Dialogs                                      ====-->
     <string name="dialog_button_settings">Settings</string>
     <string name="dialog_button_quit">Close application</string>

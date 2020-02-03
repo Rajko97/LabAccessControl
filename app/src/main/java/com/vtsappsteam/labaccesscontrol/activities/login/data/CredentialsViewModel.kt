@@ -8,8 +8,7 @@ import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import org.json.JSONObject
 
-
-class LoginViewModel : ViewModel() {
+class CredentialsViewModel : ViewModel() {
     val editUsernameContent = MutableLiveData<String>("")
     val editPasswordContent = MutableLiveData<String>("")
 
@@ -26,6 +25,12 @@ class LoginViewModel : ViewModel() {
 
     private val usernameObserver : Observer<String> = Observer { validateUsername() }
     private val passwordObserver: Observer<String> = Observer { validatePassword() }
+
+    private val _buttonEnabled = MutableLiveData<Boolean>(true)
+    val buttonEnabled : LiveData<Boolean> = _buttonEnabled
+    fun setButtonEnabled(isEnabled: Boolean) {
+        _buttonEnabled.postValue(isEnabled)
+    }
 
     override fun onCleared() {
         super.onCleared()
@@ -65,8 +70,8 @@ class LoginViewModel : ViewModel() {
     }
 
     fun setUsernameError(errorTextId : Int?) {
-            _textErrorUsername.value = errorTextId
-            _usernameFocus.value = _usernameFocus.value?.not()
+        _textErrorUsername.value = errorTextId
+        _usernameFocus.value = _usernameFocus.value?.not()
     }
 
     fun validatePassword() : Boolean {

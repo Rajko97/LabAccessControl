@@ -6,9 +6,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.res.ResourcesCompat
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.StartActivity
 
@@ -34,15 +36,16 @@ class Notifications {
                     NotificationManagerCompat.from(applicationContext).notify(id.notificationId, (NotificationCompat.Builder(applicationContext,
                         id.channelId.channelId
                     ).apply {
-                        setSmallIcon(R.mipmap.ic_launcher)
+                        setSmallIcon(R.drawable.ic_notification_icon)
                         setContentTitle(applicationContext.getString(R.string.notification_title))
                         setContentText(applicationContext.getString(R.string.notification_device_approved))
+                        color = ResourcesCompat.getColor(mContext.resources, R.color.themeTextBlue, null)
                         priority = NotificationCompat.PRIORITY_DEFAULT
                         setAutoCancel(true)
                         setContentIntent(PendingIntent.getActivity(applicationContext, 1, Intent(applicationContext, StartActivity::class.java).putExtra("isNotificationIntent", true), PendingIntent.FLAG_UPDATE_CURRENT))
                     }).build())
                 }
-                NotificationID.NOTIF_MAC_REJECTED -> TODO()
+                NotificationID.NOTIF_MAC_REJECTED -> {}
             }
         }
 
@@ -53,7 +56,7 @@ class Notifications {
         fun createNotificationChannels(applicationContext: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val notificationManager : NotificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                enumValues< NotificationChannels>().forEach {
+                enumValues<NotificationChannels>().forEach {
                     notificationManager.createNotificationChannel(NotificationChannel(it.channelId, applicationContext.getString(it.channelName), it.importance).apply {
                         description = applicationContext.getString(it.descriptionText)
                     })

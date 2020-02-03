@@ -24,19 +24,18 @@ class StartActivity : AppCompatActivity() {
         when (sharedPreferences.getString("doorPermission", "login")) {
             "true" -> {
                 FirebaseMessagingService.enableFCM()
-                lunchActivity(MainActivity::class.java)
+                lunchActivity(MainActivity::class.java).execute()
             }
             "false" -> {
                 FirebaseMessagingService.enableFCM()
-                lunchActivity(WaitActiveActivity::class.java)
+                lunchActivity(LoginActivity::class.java).setSecondFragment(true).execute()
             }
-            else -> lunchActivity(LoginActivity::class.java)
+            else -> lunchActivity(LoginActivity::class.java).setSecondFragment(false).execute()
         }
     }
 
-    private fun lunchActivity(activity: Class<out AppCompatActivity>) {
-        startActivity(Intent(this@StartActivity, activity).clearStack(isNotificationIntent()))
-        finish()
+    private fun lunchActivity(activity: Class<out AppCompatActivity>) : Intent {
+        return Intent(this@StartActivity, activity)
     }
 
     private fun isNotificationIntent() : Boolean {
@@ -47,5 +46,15 @@ class StartActivity : AppCompatActivity() {
         if (shouldClear)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         return this
+    }
+
+    private fun Intent.setSecondFragment(isLoggedIn : Boolean) : Intent {
+        return this.putExtra("isLoggedIn", isLoggedIn)
+    }
+
+    private fun Intent.execute() {
+        this.clearStack(isNotificationIntent())
+        startActivity(this)
+        finish()
     }
 }

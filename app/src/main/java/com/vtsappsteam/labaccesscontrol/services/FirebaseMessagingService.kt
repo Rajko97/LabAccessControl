@@ -51,23 +51,33 @@ class FirebaseMessagingService : FirebaseMessagingService(), Responsable {
         })
     }
 
-    override fun successResponse(res: JSONObject) {
+    override fun successResponse(applicationContext: Context, res: JSONObject) {
         isLastTokenUploaded(applicationContext, true)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent().apply {
+            putExtra("tokenUploaded", "true")
+            action = "ACTION_WAIT_ADMIN"
+        })
     }
 
-    override fun errorResponse(statusCode: Int, message: String) {
+    override fun errorResponse(applicationContext: Context, statusCode: Int, message: String) {
        isLastTokenUploaded(applicationContext, false)
     }
 
     companion object {
+        private var isUploading = false
+
         fun isLastTokenUploaded(applicationContext: Context, isIt : Boolean) {
             applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().putBoolean("isLastTokenUploaded", isIt).apply()
         }
+
+        fun isLastTokenUploading() = isUploading
+
         fun isLastTokenUploaded(applicationContext: Context) : Boolean {
-            return applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).getBoolean("isLastTokenUploaded", true)
+            return applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).getBoolean("isLastTokenUploaded", false)
         }
 
         fun enableFCM() {
+            isUploading = true
             FirebaseMessaging.getInstance().isAutoInitEnabled = true
         }
 

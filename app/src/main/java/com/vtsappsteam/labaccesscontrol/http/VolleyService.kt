@@ -7,6 +7,7 @@ import com.android.volley.Response
 import com.android.volley.TimeoutError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 import org.json.JSONObject
 import java.lang.Exception
@@ -17,16 +18,16 @@ class VolleyService(var responseCallback: Responsable, var context: Context) {
             val que = Volley.newRequestQueue(context)
             val request = object : JsonObjectRequest(Method.POST, url, params,
                 Response.Listener {
-                    response -> responseCallback.successResponse(response)
+                    response -> responseCallback.successResponse(context, response)
                 },
                 Response.ErrorListener {
                     error -> run {
                         val message = when (error) {
-                            is TimeoutError, is NetworkResponse, is NoConnectionError -> "Connection was not established with the server"
+                            is TimeoutError, is NetworkResponse, is NoConnectionError -> context.resources.getString(R.string.error_server_unavailable)
                             is OutOfMemoryError -> "Error: Out of Memory"
                             else -> "An unknown error occurred."
                         }
-                        responseCallback.errorResponse(if (error.networkResponse != null) error.networkResponse.statusCode else 0, message)
+                        responseCallback.errorResponse(context, if (error.networkResponse != null) error.networkResponse.statusCode else 0, message)
                     }
                 }) {
                 override fun getHeaders(): MutableMap<String, String> {

@@ -23,6 +23,15 @@
     <string name="error_password_empty">* Polje ne sme biti prazno!</string>
     <string name="error_password_blank">* Polje ne sme da sadrži blanko znak!</string>
 
+    <!-- Fragment Wait Approval -->
+    <string name="device_approval">Odobrenje administratora</string>
+    <string name="device_approval_desc">Prijavili ste se sa novog uređaja. Potrebno je da sačekate da administrator odobri ovaj uređaj</string>
+    <string name="progress_desc_contacting">Povezivanje na server…</string>
+    <string name="progress_desc_waiting">Čekanje na odobrenje…</string>
+    <string name="progress_desc_approved">Vaš uređaj je odobren</string>
+    <string name="fragment_approval_continue">Nastavi ▶︎</string>
+    <string name="fragment_approval_cancel">◀︎ Otkaži</string>
+
     <!--====                         Dialogs                                      ====-->
     <string name="dialog_title_no_connection">Nema konekcije</string>
     <string name="dialog_text_no_internet">Aplikacija zahteva internet konekciju. Uključite WiFi ili mobilne podatke</string>

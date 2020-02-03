@@ -7,5 +7,6 @@
     <color name="themeTextBlue">#0C7FCC</color>
     <color name="themeBackgroundColor">#1a1a1a</color>
     <color name="themeTextGray">#999999</color>
+    <color name="themeTextGreen">#14984a</color>
     <color name="btnRipple">#274078</color>
 </resources>

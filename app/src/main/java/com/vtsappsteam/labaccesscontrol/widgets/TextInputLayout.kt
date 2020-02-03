@@ -10,6 +10,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.utils.TypefaceSpan
 
+
 class TextInputLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

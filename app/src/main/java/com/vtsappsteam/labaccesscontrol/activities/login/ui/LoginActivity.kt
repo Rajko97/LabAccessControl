@@ -3,133 +3,99 @@ package com.vtsappsteam.labaccesscontrol.activities.login.ui
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.Fade
 import android.view.View
-import android.widget.Toast
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.view.ViewCompat
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import android.view.animation.DecelerateInterpolator
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.vtsappsteam.labaccesscontrol.R
-import com.vtsappsteam.labaccesscontrol.activities.MainActivity
-import com.vtsappsteam.labaccesscontrol.activities.WaitActiveActivity
-import com.vtsappsteam.labaccesscontrol.databinding.ActivityLoginBinding
-import com.vtsappsteam.labaccesscontrol.http.Responsable
-import com.vtsappsteam.labaccesscontrol.http.VolleyService
-import com.vtsappsteam.labaccesscontrol.activities.login.data.LoginViewModel
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver.Companion.alertDialogNet
 import com.vtsappsteam.labaccesscontrol.dialogs.WaitingDialog
-import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
-import com.vtsappsteam.labaccesscontrol.utils.Constants
-import com.vtsappsteam.labaccesscontrol.utils.Constants.Companion.API_ROUTE_LOGIN
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-import org.json.JSONObject
 
-class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.ConnectivityReceiverListener {
+class LoginActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
     private lateinit var adNoInternetConnection: Dialog
     private lateinit var adMacProblem: Dialog
     private lateinit var progressBar: WaitingDialog
     private var connectivityReceiver: BroadcastReceiver = ConnectivityReceiver(this)
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get(LoginViewModel::class.java)}
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeNoActionBar)
         super.onCreate(savedInstanceState)
-
-        val decor = window.decorView
-        window.enterTransition = null
-        Fade().run {
-            excludeTarget(decor.findViewById<View>(R.id.action_bar_container), true)
-            excludeTarget(android.R.id.statusBarBackground, true)
-            excludeTarget(android.R.id.navigationBarBackground, true)
-        }
-
-         (DataBindingUtil.setContentView(this, R.layout.activity_login) as ActivityLoginBinding).run {
-            lifecycleOwner = this@LoginActivity
-            activity = this@LoginActivity
-            viewModel = this@LoginActivity.viewModel
-            mainLayout.requestFocus()
-        }
-
+        setContentView(R.layout.activity_login)
+        setFragment(if(intent.getBooleanExtra("isLoggedIn", false)) WaitApprovalFragment.newInstance() else CredentialsFragment.newInstance())
+        clearStartAnimations()
+        clearKeyboardOnLayoutClick()
         adMacProblem = alertDialogNet(this, resources.getString(R.string.dialog_title_mac_notfound), resources.getString(R.string.dialog_text_no_mac))
         adNoInternetConnection = alertDialogNet(this, null, null)
         progressBar = WaitingDialog(this)
     }
 
-    fun onButtonClicked() {
-        if (viewModel.validateUsername() and viewModel.validatePassword()) {
-            btnSingUp.isEnabled = false //todo using viewModel
-            progressBar.show()
-            val http = VolleyService(this, applicationContext)
-            http.post(API_ROUTE_LOGIN, viewModel.getRequestBody())
+    private fun setFragment(fragment : Fragment) {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }
+
+    private fun clearStartAnimations() {
+        val decor = window.decorView
+        window.enterTransition = null
+        window.sharedElementEnterTransition.duration = 700
+        window.sharedElementReturnTransition.duration = 700
+        window.sharedElementReturnTransition.interpolator = DecelerateInterpolator()
+        Fade().run {
+            excludeTarget(decor.findViewById<View>(R.id.action_bar_container), true)
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
         }
     }
 
-    override fun successResponse(res: JSONObject) {
-        CoroutineScope(Dispatchers.Main).launch {
-            progressBar.delayTime()?.let { delay(it) }
-            window.exitTransition = null
-             getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().apply {
-                putString("username", res.getString("username"))
-                putString("firstName", res.getString("name"))
-                putString("lastName", res.getString("lastName"))
-                putString("rank", res.getString("rank"))
-                putString("routerMAC", res.getString("samsungAppsLabRouterMacAddress"))
-                putString("uniqueToken", res.getString("uniqueToken"))
-                apply()
+    private fun clearKeyboardOnLayoutClick() {
+        mainLayout.run {
+            requestFocus()
+            setOnFocusChangeListener { v, hasFocus ->
+                if(v.id == this.id && hasFocus) {
+                    val imm : InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
             }
-
-            applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).
-                edit().putString("doorPermission", res.getBoolean("doorPermission").toString()).apply()
-
-            FirebaseMessagingService.enableFCM()
-
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@LoginActivity,
-                logoHeader,
-                ViewCompat.getTransitionName(logoHeader)!!
-            )
-
-            startActivity(
-                Intent(
-                    this@LoginActivity,
-                    if (res.getBoolean("doorPermission")) MainActivity::class.java else WaitActiveActivity::class.java
-                ),
-                options.toBundle()
-            )
-            finish()
         }
     }
 
-    override fun errorResponse(statusCode : Int, message: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            progressBar.delayTime()?.let { delay(it) }
-            btnSingUp.isEnabled = true
-            val errorMessage : String = when (statusCode) {
-                401 -> {
-                    viewModel.setUsernameError(R.string.error_username_notfound)
-                    getString(R.string.error_error)
-                }
-                402 -> {
-                    viewModel.setPasswordError(R.string.error_wrong_password)
-                    getString(R.string.error_error)
-                }
-                503 -> getString(R.string.error_server_unavailable)
-                else -> message
-            }
-            progressBar.hide()
-            Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT).show()
-        }
+    fun nextFragment() {
+        val fragmentManager = supportFragmentManager
+
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.enter_from_right,
+            R.anim.exit_to_left,
+            R.anim.enter_from_left,
+            R.anim.exit_to_right
+        )
+        transaction.replace(R.id.fragmentContainer, WaitApprovalFragment.newInstance())
+        transaction.commit()
+    }
+
+    fun backFragment() {
+        val fragmentManager = supportFragmentManager
+
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+            R.anim.enter_from_left,
+            R.anim.exit_to_right,
+            R.anim.enter_from_right,
+            R.anim.exit_to_left
+        )
+        transaction.replace(R.id.fragmentContainer, CredentialsFragment.newInstance())
+        transaction.commit()
     }
 
     override fun onStop() {
@@ -147,11 +113,6 @@ class LoginActivity : AppCompatActivity(), Responsable, ConnectivityReceiver.Con
     override fun onResume() {
         super.onResume()
         checkNet()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        progressBar.dismiss()
     }
 
     private fun checkNet() {
