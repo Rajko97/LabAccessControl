@@ -1,12 +1,11 @@
 package com.vtsappsteam.labaccesscontrol.services.utils
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -21,12 +20,25 @@ class Notifications {
             R.string.notification_name_mac_change,
             R.string.notification_desc_mac_change,
             NotificationManager.IMPORTANCE_DEFAULT
+        ),
+        CHANNEL_CONTROL(
+            "channelControl",
+            R.string.notification_name_lab_control,
+            R.string.notification_desc_lab_control,
+            NotificationManager.IMPORTANCE_MAX
+        ),
+        CHANNEL_HIDDEN(
+            "channelHidden",
+            R.string.notification_name_hidden,
+            R.string.notification_desc_hidden,
+            NotificationManager.IMPORTANCE_MIN
         )
+
     }
 
     enum class NotificationID(val notificationId: Int, val channelId: NotificationChannels) {
         NOTIF_MAC_APPROVED(0, NotificationChannels.CHANNEL_MAC),
-        NOTIF_MAC_REJECTED(0, NotificationChannels.CHANNEL_MAC)
+        NOTIF_MAC_REJECTED(0, NotificationChannels.CHANNEL_MAC),
     }
 
     companion object {
@@ -59,6 +71,9 @@ class Notifications {
                 enumValues<NotificationChannels>().forEach {
                     notificationManager.createNotificationChannel(NotificationChannel(it.channelId, applicationContext.getString(it.channelName), it.importance).apply {
                         description = applicationContext.getString(it.descriptionText)
+                        if(it == NotificationChannels.CHANNEL_CONTROL) {
+                            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                        }
                     })
                 }
             }

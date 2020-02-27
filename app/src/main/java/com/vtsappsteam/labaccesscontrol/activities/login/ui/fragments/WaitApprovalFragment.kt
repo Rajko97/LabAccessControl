@@ -1,4 +1,4 @@
-package com.vtsappsteam.labaccesscontrol.activities.login.ui
+package com.vtsappsteam.labaccesscontrol.activities.login.ui.fragments
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 
 import com.vtsappsteam.labaccesscontrol.activities.MainActivity
 import com.vtsappsteam.labaccesscontrol.activities.login.data.WaitApprovalViewModel
+import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.databinding.WaitApprovalFragmentBinding
 import com.vtsappsteam.labaccesscontrol.http.Responsable
 import com.vtsappsteam.labaccesscontrol.http.VolleyService
@@ -28,7 +28,8 @@ import org.json.JSONObject
 
 class WaitApprovalFragment : Fragment(), Responsable {
     companion object {
-        fun newInstance() = WaitApprovalFragment()
+        fun newInstance() =
+            WaitApprovalFragment()
     }
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {

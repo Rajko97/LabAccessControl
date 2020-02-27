@@ -44,6 +44,17 @@
     <!--===                            Notifications                                ===-->
     <string name="notification_title">VTŠ Apps Team</string>
     <string name="notification_device_approved">Your device is approved. You may now use the application.</string>
+    <!--===                            Notification channels                        ===-->
     <string name="notification_name_mac_change">MAC Change requests</string>
     <string name="notification_desc_mac_change">Notify me when administrator approve my device</string>
+    <string name="notification_name_lab_control">LAB Control</string>
+    <string name="notification_desc_lab_control">Notification for controlling door\'s lock</string>
+    <string name="service_connectivity_desc">This service check for connectivity for displaying notification</string>
+    <string name="notification_name_hidden">Notification for background service</string>
+    <string name="notification_desc_hidden">This is hidden notification</string>
+
+    <!--===                         Lab Control                                     ====-->
+    <string name="welcome_message">Welcome to Lab</string>
+    <string name="goodbye_message">You have left the lab</string>
+    <string name="button_unlock">Unlock</string>
 </resources>

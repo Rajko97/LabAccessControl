@@ -46,4 +46,14 @@
     <string name="notification_device_approved">Vaš uređaj je odobren. Možete da koristite aplikaciju.</string>
     <string name="notification_name_mac_change">Promena uređaja</string>
     <string name="notification_desc_mac_change">Obavesti me kada administrator odobri moj uređaj</string>
+    <string name="notification_name_lab_control">Kontrola laboratorije</string>
+    <string name="notification_desc_lab_control">Notifikacija sa kontrolama za upravljanje laboratirije</string>
+    <string name="service_connectivity_desc">Ovaj  servis proverava konekciju da bi prikazao notifikaciju sa alatima za upravljanje laboratorijom</string>
+    <string name="notification_name_hidden">Notifikacije za servise u pozadini</string>
+    <string name="notification_desc_hidden">Ovo notifikacije treba da budu sakrivene</string>
+
+
+    <string name="welcome_message">Dobrodošao u lab</string>
+    <string name="goodbye_message">Napustili ste lab</string>
+    <string name="button_unlock">Otključaj</string>
 </resources>

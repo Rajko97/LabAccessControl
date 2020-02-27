@@ -1,4 +1,4 @@
-package com.vtsappsteam.labaccesscontrol.activities.login.ui
+package com.vtsappsteam.labaccesscontrol.activities.login.ui.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.MainActivity
 import com.vtsappsteam.labaccesscontrol.activities.login.data.CredentialsViewModel
+import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.databinding.CredentialsFragmentBinding
 import com.vtsappsteam.labaccesscontrol.dialogs.WaitingDialog
 import com.vtsappsteam.labaccesscontrol.http.Responsable
@@ -70,8 +71,10 @@ class CredentialsFragment : Fragment(), Responsable {
                     putString("uniqueToken", res.getString("uniqueToken"))
                     apply()
                 }
-                applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).
-                    edit().putString("doorPermission", res.getBoolean("doorPermission").toString()).apply()
+                applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit()
+                    .putString("doorPermission", res.getBoolean("doorPermission").toString())
+                    .putString("uniqueToken", res.getString("uniqueToken"))
+                    .apply()
 
                 FirebaseMessagingService.enableFCM()
 

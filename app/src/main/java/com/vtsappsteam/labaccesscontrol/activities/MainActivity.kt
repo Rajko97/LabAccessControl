@@ -2,12 +2,12 @@ package com.vtsappsteam.labaccesscontrol.activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.transition.Fade
@@ -15,8 +15,10 @@ import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
+import com.vtsappsteam.labaccesscontrol.services.utils.UnkillableServiceHelper
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
         }
+        UnkillableServiceHelper.startMyService(this@MainActivity)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logoImage,
             ViewCompat.getTransitionName(logoImage)!!
         )
+        UnkillableServiceHelper.stopMyService(this@MainActivity)
         FirebaseMessagingService.disableFCM()
         startActivity(Intent(this@MainActivity, LoginActivity::class.java), options.toBundle())
         finish()

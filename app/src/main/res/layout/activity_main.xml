@@ -35,4 +35,12 @@
         android:layout_height="1dp"
         android:background="#34afc7">
     </androidx.appcompat.widget.LinearLayoutCompat>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="32dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
 </LinearLayout>

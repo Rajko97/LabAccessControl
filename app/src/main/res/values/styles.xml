@@ -14,8 +14,12 @@
         <item name="android:fontFamily">@font/exo</item>
         <item name="colorControlHighlight">@color/btnRipple</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="actionOverflowMenuStyle">@style/optionMenu</item>
     </style>
 
+    <style name="optionMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/themeBackgroundColor</item>
+    </style>
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:windowNoTitle">true</item>

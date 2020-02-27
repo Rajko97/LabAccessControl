@@ -2,7 +2,7 @@
 <layout
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".activities.login.ui.WaitApprovalFragment">
+    tools:context=".activities.login.ui.fragments.WaitApprovalFragment">
     <data>
         <import type="android.view.View"/>
         <import type="com.vtsappsteam.labaccesscontrol.R"/>
@@ -11,7 +11,7 @@
             type="com.vtsappsteam.labaccesscontrol.activities.login.data.WaitApprovalViewModel" />
         <variable
             name="fragment"
-            type="com.vtsappsteam.labaccesscontrol.activities.login.ui.WaitApprovalFragment" />
+            type="com.vtsappsteam.labaccesscontrol.activities.login.ui.fragments.WaitApprovalFragment" />
     </data>
 
 

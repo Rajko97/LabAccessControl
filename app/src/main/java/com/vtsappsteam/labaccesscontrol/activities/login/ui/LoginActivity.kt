@@ -1,30 +1,38 @@
 package com.vtsappsteam.labaccesscontrol.activities.login.ui
 
+import android.Manifest
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.transition.Fade
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.vtsappsteam.labaccesscontrol.R
+import com.vtsappsteam.labaccesscontrol.activities.login.ui.fragments.CredentialsFragment
+import com.vtsappsteam.labaccesscontrol.activities.login.ui.fragments.WaitApprovalFragment
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver.Companion.alertDialogNet
 import com.vtsappsteam.labaccesscontrol.dialogs.WaitingDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
+private const val PERMISSION_FINE_LOCATION = 747
 
 class LoginActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
     private lateinit var adNoInternetConnection: Dialog
     private lateinit var adMacProblem: Dialog
     private lateinit var progressBar: WaitingDialog
     private var connectivityReceiver: BroadcastReceiver = ConnectivityReceiver(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeNoActionBar)
@@ -36,6 +44,10 @@ class LoginActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
         adMacProblem = alertDialogNet(this, resources.getString(R.string.dialog_title_mac_notfound), resources.getString(R.string.dialog_text_no_mac))
         adNoInternetConnection = alertDialogNet(this, null, null)
         progressBar = WaitingDialog(this)
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_FINE_LOCATION)
+        }
     }
 
     private fun setFragment(fragment : Fragment) {

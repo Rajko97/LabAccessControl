@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:name=".Application"
@@ -35,13 +38,18 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:launchMode="singleTop"/>
         <activity
-            android:name=".activities.WaitActiveActivity"
-            android:launchMode="singleTop"/>
-        <activity
             android:name=".activities.MainActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" >
+        </activity>
 
         <receiver android:name=".broadcast_receiver.ConnectivityReceiver" />
+        <receiver android:name=".broadcast_receiver.NotificationReceiver"/>
+        <receiver android:name=".broadcast_receiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
 
         <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false"/>
         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false"/>
@@ -51,6 +59,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".services.LabControlService"/>
+        <service android:name=".services.ConnectivityListener"
+            android:process=":serviceNonStoppable"
+            android:exported="false"
+            android:description="@string/service_connectivity_desc"/>
     </application>
-
 </manifest>
