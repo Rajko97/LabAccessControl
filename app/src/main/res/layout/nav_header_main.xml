@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/themeBackgroundDark"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="bottom"
+    tools:showIn="@layout/activity_main">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        tools:srcCompat="@drawable/avatar"
+        android:contentDescription="@string/nav_header_avatar_desc" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="#eeeeee"
+        android:textStyle="bold"
+        tools:text="Milan Rajković"/>
+
+    <TextView
+        android:id="@+id/userRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/themeTextGray"
+        tools:text="Senior member"/>
+</LinearLayout>

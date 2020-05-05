@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import com.vtsappsteam.labaccesscontrol.R
-import com.vtsappsteam.labaccesscontrol.activities.MainActivity
+import com.vtsappsteam.labaccesscontrol.activities.main.MainActivity
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.NotificationReceiver
 import com.vtsappsteam.labaccesscontrol.http.SocketIO
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications

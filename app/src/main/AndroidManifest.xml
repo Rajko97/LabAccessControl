@@ -38,7 +38,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:launchMode="singleTop"/>
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.main.MainActivity"
             android:launchMode="singleTop" >
         </activity>
 

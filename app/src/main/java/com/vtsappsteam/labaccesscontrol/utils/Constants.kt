@@ -23,9 +23,9 @@ class Constants {
             return TimeUnit.MILLISECONDS.toMillis(1500)
         }
 
-        //after this point, client is checkedIn
+        //above this point, client is checkedIn
         const val CHECK_IN_WIFI_WIFI_STRENGTH = -50 //dBi
-        //after this point, client is checkedOut
+        //bellow this point, client is checkedOut
         const val CHECK_OUT_WIFI_STRENGTH = -70 //dBi
     }
 }

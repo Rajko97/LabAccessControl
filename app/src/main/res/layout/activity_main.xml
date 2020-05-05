@@ -1,46 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.rupins.drawercardbehaviour.CardDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity"
-    android:background="@drawable/bg_image">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/appToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        app:contentInsetStart="0dp"
-        tools:ignore="RtlHardcoded,RtlSymmetry">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/logoImage"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/logo_header"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:transitionName="logo_image_transition"/>
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
+    android:fitsSystemWindows="true"
+    android:background="@color/themeBackgroundDark"
+    tools:openDrawer="start">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#34afc7">
-    </androidx.appcompat.widget.LinearLayoutCompat>
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="32dp"
+        android:background="@drawable/bg_image"
         android:orientation="vertical">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/appToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            android:background="@color/themeBackgroundLight">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/logoImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo_header"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:transitionName="logo_image_transition"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </LinearLayout>
-</LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:theme="@style/AppThemeNoActionBar.NavigationView"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:background="@color/themeBackgroundDark"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/main_activity_drawer"
+        app:itemTextColor="#eee"
+        app:itemIconTint="#eee"/>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view_notification"
+        android:background="@color/themeBackgroundLight"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="false">
+        <include layout="@layout/content_notification"/>
+    </com.google.android.material.navigation.NavigationView>
+</com.rupins.drawercardbehaviour.CardDrawerLayout>

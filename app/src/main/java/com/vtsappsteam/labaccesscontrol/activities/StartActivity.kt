@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
+import com.vtsappsteam.labaccesscontrol.activities.main.MainActivity
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 

@@ -12,14 +12,29 @@
         <item name="colorPrimaryDark">@color/themeBackgroundColor</item>
         <item name="colorAccent">@color/themeTextBlue</item>
         <item name="android:fontFamily">@font/exo</item>
-        <item name="colorControlHighlight">@color/btnRipple</item>
+        <item name="colorControlHighlight">@color/btnRippleLightGrey</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="actionOverflowMenuStyle">@style/optionMenu</item>
+        <item name="drawerArrowStyle">@style/drawerArrowStyle</item>
+        <item name="colorControlNormal">@color/themeBackgroundColor</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="optionMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/themeBackgroundColor</item>
     </style>
+    <style name="drawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="android:color">@color/themeBackgroundColor</item>
+    </style>
+
+    <style name="AppThemeNoActionBar.NavigationView" >
+        <item name="android:listDivider">@color/veryDarkBlack</item>
+        <item name="android:textColorSecondary">@color/themeTextGray</item>
+    </style>
+
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:windowNoTitle">true</item>
@@ -39,4 +54,6 @@
         <item name="android:textColor">#f00</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <color name="veryDarkBlack">#111</color>
 </resources>

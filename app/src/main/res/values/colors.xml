@@ -6,7 +6,10 @@
 
     <color name="themeTextBlue">#0C7FCC</color>
     <color name="themeBackgroundColor">#1a1a1a</color>
+    <color name="themeBackgroundLight">#2d2e32</color>
+    <color name="themeBackgroundDark">#202125</color>
     <color name="themeTextGray">#999999</color>
     <color name="themeTextGreen">#14984a</color>
     <color name="btnRipple">#274078</color>
+    <color name="btnRippleLightGrey">#3d3e42</color>
 </resources>

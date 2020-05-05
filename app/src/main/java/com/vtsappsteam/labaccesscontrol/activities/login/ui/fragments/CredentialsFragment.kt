@@ -13,7 +13,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 
 import com.vtsappsteam.labaccesscontrol.R
-import com.vtsappsteam.labaccesscontrol.activities.MainActivity
+import com.vtsappsteam.labaccesscontrol.activities.main.MainActivity
 import com.vtsappsteam.labaccesscontrol.activities.login.data.CredentialsViewModel
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.databinding.CredentialsFragmentBinding

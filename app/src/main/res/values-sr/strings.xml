@@ -52,8 +52,20 @@
     <string name="notification_name_hidden">Notifikacije za servise u pozadini</string>
     <string name="notification_desc_hidden">Ovo notifikacije treba da budu sakrivene</string>
 
-
+    <!--===                         Lab Control                                   ====-->
     <string name="welcome_message">Dobrodošao u lab</string>
     <string name="goodbye_message">Napustili ste lab</string>
     <string name="button_unlock">Otključaj</string>
+
+
+    <!--====                        Main Activity                                 ====-->
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="nav_header_avatar_desc">Avatar korisnika</string>
+    <string name="toolbar_option_notifications">Notifikacije</string>
+    <string name="menu_item_homepage">Pristub laboratoriji</string>
+    <string name="menu_item_current_in">Prisutni u lab</string>
+    <string name="menu_item_time_spent">Provedeno vreme</string>
+    <string name="menu_item_settings">Podešavanja</string>
 </resources>

@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.iid.FirebaseInstanceId
 
-import com.vtsappsteam.labaccesscontrol.activities.MainActivity
+import com.vtsappsteam.labaccesscontrol.activities.main.MainActivity
 import com.vtsappsteam.labaccesscontrol.activities.login.data.WaitApprovalViewModel
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
 import com.vtsappsteam.labaccesscontrol.databinding.WaitApprovalFragmentBinding
