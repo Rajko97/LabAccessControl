@@ -48,7 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragmentTimeInLab = TimeInLabFragment()
         fragmentSettings = SettingsFragment()
 
-        setFragment(fragmentHome)
+        if(savedInstanceState == null)
+            setFragmentByChosenItem(R.id.nav_home_page)
 
         Notifications.cancelApprovedDeviceNotification(this)
         /*val decor = window.decorView
@@ -62,6 +63,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            excludeTarget(android.R.id.navigationBarBackground, true)
 //        }*/
 //        UnkillableServiceHelper.startMyService(this@MainActivity)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        setFragmentByChosenItem(nav_view.getSelectedItemId())
+    }
+
+    private fun NavigationView.getSelectedItemId() : Int {
+        for (i in 0 until this.menu.size()) {
+            if(this.menu.getItem(i).isChecked) {
+                return this.menu.getItem(i).itemId
+            }
+        }
+        return -1
     }
 
     @SuppressLint("SetTextI18n")
@@ -100,21 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean { // Handle navigation view item clicks here.
         drawer!!.closeDrawer(GravityCompat.START)
-        when(item.itemId) {
-            R.id.nav_home_page -> {
-                setFragment(fragmentHome)
-            }
-            R.id.nav_current_in_lab -> {
-                setFragment(fragmentCurrentInLab)
-            }
-            R.id.nav_timespent -> {
-                setFragment(fragmentTimeInLab)
-            }
-            R.id.nav_settings -> {
-                logOut()
-                //setFragment(fragmentSettings)
-            }
-        }
+        setFragmentByChosenItem(item.itemId)
         return true
     }
 
@@ -133,12 +134,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setFragment(fragment : Fragment) {
-        val fragmentManager: FragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commit()
+    //Returns whether fragment is set or not
+    private fun setFragmentByChosenItem(itemId : Int) : Boolean {
+        var fragmentReference : Fragment? = null
+        when(itemId) {
+            R.id.nav_home_page -> {
+                fragmentReference = fragmentHome
+            }
+            R.id.nav_current_in_lab -> {
+                fragmentReference = fragmentCurrentInLab
+            }
+            R.id.nav_timespent -> {
+                fragmentReference = fragmentTimeInLab
+            }
+            R.id.nav_settings -> {
+                logOut()
+                //setFragment(fragmentSettings)
+            }
+        }
+
+        if(fragmentReference != null) {
+            val fragmentManager: FragmentManager = supportFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragmentReference)
+                .commit()
+            return true
+        }
+        return false
     }
+
     private fun logOut() {
         //getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         //applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
