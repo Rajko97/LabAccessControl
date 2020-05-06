@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home_page"
+            android:icon="@drawable/ic_key"
+            android:title="@string/menu_item_homepage" />
+        <item
+            android:id="@+id/nav_current_in_lab"
+            android:icon="@drawable/ic_users_group"
+            android:title="@string/menu_item_current_in" />
+        <item
+            android:id="@+id/nav_timespent"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/menu_item_time_spent"
+            />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/menu_item_settings" />
+    </group>
+</menu>
