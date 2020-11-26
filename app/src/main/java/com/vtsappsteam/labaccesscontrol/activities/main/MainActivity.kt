@@ -7,6 +7,10 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AnticipateOvershootInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -14,6 +18,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.transition.Fade
 import com.google.android.material.navigation.NavigationView
 import com.rupins.drawercardbehaviour.CardDrawerLayout
 import com.vtsappsteam.labaccesscontrol.R
@@ -22,6 +27,7 @@ import com.vtsappsteam.labaccesscontrol.activities.main.fragments.PresentMembers
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.LabControlFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.SettingsFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.TimeInLabFragment
+import com.vtsappsteam.labaccesscontrol.http.SocketIO
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.services.utils.UnkillableServiceHelper
@@ -31,10 +37,10 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var drawer: CardDrawerLayout? = null
 
-    private lateinit var fragmentHome : Fragment
-    private lateinit var fragmentCurrentInLab : Fragment
-    private lateinit var fragmentTimeInLab : Fragment
-    private lateinit var fragmentSettings : Fragment
+    private lateinit var fragmentHome : LabControlFragment
+    private lateinit var fragmentCurrentInLab : PresentMembersFragment
+    private lateinit var fragmentTimeInLab : TimeInLabFragment
+    private lateinit var fragmentSettings : SettingsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppThemeNoActionBar)
@@ -52,31 +58,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setFragmentByChosenItem(R.id.nav_home_page)
 
         Notifications.cancelApprovedDeviceNotification(this)
-        /*val decor = window.decorView
-//        window.enterTransition = null
-//        window.sharedElementEnterTransition.duration = 1000
-//        window.sharedElementReturnTransition.duration = 1000
-//        window.sharedElementReturnTransition.interpolator = DecelerateInterpolator()
-//        Fade().apply {
-//            excludeTarget(decor.findViewById<View>(R.id.action_bar_container), true)
-//            excludeTarget(android.R.id.statusBarBackground, true)
-//            excludeTarget(android.R.id.navigationBarBackground, true)
-//        }*/
-//        UnkillableServiceHelper.startMyService(this@MainActivity)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        setFragmentByChosenItem(nav_view.getSelectedItemId())
-    }
-
-    private fun NavigationView.getSelectedItemId() : Int {
-        for (i in 0 until this.menu.size()) {
-            if(this.menu.getItem(i).isChecked) {
-                return this.menu.getItem(i).itemId
-            }
+        val decor = window.decorView
+        window.enterTransition = null
+        window.sharedElementEnterTransition.duration = 1000
+        window.sharedElementReturnTransition.duration = 1000
+        window.sharedElementReturnTransition.interpolator = AccelerateInterpolator(10f)
+        Fade().apply {
+            excludeTarget(decor.findViewById<View>(R.id.action_bar_container), true)
+            excludeTarget(android.R.id.statusBarBackground, true)
+            excludeTarget(android.R.id.navigationBarBackground, true)
         }
-        return -1
+        UnkillableServiceHelper.startMyService(this@MainActivity)
     }
 
     @SuppressLint("SetTextI18n")
@@ -99,6 +91,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.menu.getItem(0).isChecked = true
+        (nav_view.menu.findItem(R.id.nav_current_in_lab).actionView as TextView).text = "10"
 
         drawer!!.setViewScale(Gravity.START, 0.9f)
         //drawer!!.setRadius(Gravity.START, 35f) //this creates graphic glitch on dark background

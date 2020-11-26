@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 class Constants {
     companion object {
-        const val API_ADDRESS: String = "http://192.168.137.1:3000"
+        const val API_ADDRESS: String = "http://192.168.1.105:3000"
 
         @JvmField val API_ROUTE_LOGIN = loginRoute()
         private fun loginRoute(): String {
@@ -24,8 +24,8 @@ class Constants {
         }
 
         //above this point, client is checkedIn
-        const val CHECK_IN_WIFI_WIFI_STRENGTH = -50 //dBi
+        const val CHECK_IN_WIFI_WIFI_STRENGTH = -70 //dBi 50
         //bellow this point, client is checkedOut
-        const val CHECK_OUT_WIFI_STRENGTH = -70 //dBi
+        const val CHECK_OUT_WIFI_STRENGTH = -90 //dBi 70
     }
 }

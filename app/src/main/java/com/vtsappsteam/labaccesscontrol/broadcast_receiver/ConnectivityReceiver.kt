@@ -11,6 +11,7 @@ import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.internal.VisibilityAwareImageButton
@@ -196,6 +197,7 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
     private fun connectedOnSamsungAppsLab(context: Context) : Boolean {
         val sp: SharedPreferences = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
         val manager : WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?
+        Log.d("Testiranje", ""+manager?.connectionInfo?.bssid.toString())
         return manager?.connectionInfo?.bssid.toString().toUpperCase(Locale.ROOT) == (sp.getString("routerMAC", "notSet") as String).toUpperCase(Locale.ROOT)
     }
 }

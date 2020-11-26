@@ -1,6 +1,7 @@
 package com.vtsappsteam.labaccesscontrol.activities.login.ui
 
 import android.Manifest
+import android.accounts.AccountManager
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -49,7 +50,7 @@ class LoginActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_FINE_LOCATION)
         }
-    }
+     }
 
     private fun setFragment(fragment : Fragment) {
         val fragmentManager: FragmentManager = supportFragmentManager
