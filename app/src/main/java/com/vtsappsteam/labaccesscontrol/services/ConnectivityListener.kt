@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.BitmapFactory
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -47,7 +48,7 @@ class ConnectivityListener : Service() {
         }
     }
 
-    private val broadcastReceiver : BroadcastReceiver = object : BroadcastReceiver() {
+    private val doorPermissionReceiver : BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val newPermission = intent?.getStringExtra("doorPermission")
             if(newPermission == "true") {
@@ -61,40 +62,25 @@ class ConnectivityListener : Service() {
         }
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkRequest = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .build()
+    private val locationSwitchReceiver : BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+                val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-        hasLabAccess = "true" == applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).getString("doorPermission", "false")
-        samsungAppsLabRouterMAC = getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).getString("routerMAC", "") as String
-
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallbacks)
-
-        if(ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
-            isOnNetwork = true
-            if(hasLabAccess) {
-                startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                if (isGpsEnabled || isNetworkEnabled) {
+                    if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
+                        isOnNetwork = true
+                        if (hasLabAccess) {
+                            startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                        }
+                    }
+                } else {
+                    isOnNetwork = false
+                    stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                }
             }
-        }
-
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForeground(123456, NotificationCompat.Builder(this@ConnectivityListener, Notifications.NotificationChannels.CHANNEL_HIDDEN.channelId)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setLargeIcon(BitmapFactory.decodeResource(this@ConnectivityListener.resources, R.mipmap.ic_launcher_foreground))
-                .setAutoCancel(false)
-                .setProgress(0, 0, true)
-                .setContentTitle(applicationContext.getString(R.string.notification_network_monitoring_title))
-                .setContentText(applicationContext.getString(R.string.notification_network_monitoring_desc) )
-                .setOngoing(true)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setOnlyAlertOnce(true)
-                .build())
-            Service.START_STICKY
-        } else {
-            Service.START_REDELIVER_INTENT
         }
     }
 
@@ -103,7 +89,64 @@ class ConnectivityListener : Service() {
             wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         }
         super.onCreate()
-        registerReceiver(broadcastReceiver, IntentFilter("ACTION_DOOR_PERMISSION_CHANGE"))
+        registerReceiver(doorPermissionReceiver, IntentFilter("ACTION_DOOR_PERMISSION_CHANGE"))
+        registerReceiver(locationSwitchReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
+    }
+
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+
+        hasLabAccess = "true" == applicationContext.getSharedPreferences(
+            Constants.PREF_NAME,
+            Context.MODE_PRIVATE
+        ).getString("doorPermission", "false")
+        samsungAppsLabRouterMAC =
+            getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).getString(
+                "routerMAC",
+                ""
+            ) as String
+
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallbacks)
+
+        if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
+            isOnNetwork = true
+            if (hasLabAccess) {
+                startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+            }
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return Service.START_REDELIVER_INTENT
+        }
+
+        startForeground(
+            123456,
+            NotificationCompat.Builder(
+                this@ConnectivityListener,
+                Notifications.NotificationChannels.CHANNEL_HIDDEN.channelId
+            )
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setLargeIcon(
+                    BitmapFactory.decodeResource(
+                        this@ConnectivityListener.resources,
+                        R.mipmap.ic_launcher_foreground
+                    )
+                )
+                .setAutoCancel(false)
+                .setProgress(0, 0, true)
+                .setContentTitle(applicationContext.getString(R.string.notification_network_monitoring_title))
+                .setContentText(applicationContext.getString(R.string.notification_network_monitoring_desc))
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setOnlyAlertOnce(true)
+                .build()
+        )
+        return Service.START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -111,6 +154,7 @@ class ConnectivityListener : Service() {
     }
 
     override fun onDestroy() {
-        unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(doorPermissionReceiver)
+        unregisterReceiver(locationSwitchReceiver)
     }
 }
