@@ -11,7 +11,6 @@ import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.internal.VisibilityAwareImageButton
@@ -57,6 +56,12 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
 
         fun getMacAddress() : String {
             return macAddress
+        }
+
+        fun isConnectedOnSamsungAppsLab(context: Context) : Boolean {
+            val sp: SharedPreferences = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
+            val manager : WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?
+            return manager?.connectionInfo?.bssid.toString().toUpperCase(Locale.ROOT) == (sp.getString("routerMAC", "notSet") as String).toUpperCase(Locale.ROOT)
         }
 
         @SuppressLint("HardwareIds")
@@ -171,7 +176,7 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
             isConnected = networkType != ConnectionType.CONNECTION_NO_INTERNET
             connectivityReceiverListener.onNetworkConnectionChanged(
                 networkType,
-                connectedOnSamsungAppsLab(context)
+                isConnectedOnSamsungAppsLab(context)
             )
         }
     }
@@ -192,12 +197,5 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
             val nwInfo = connectivityManager.activeNetworkInfo ?: return ConnectionType.CONNECTION_NO_INTERNET
             return if (nwInfo.isConnected) ConnectionType.CONNECTION_MOBILE_DATA else ConnectionType.CONNECTION_NO_INTERNET
         }
-    }
-
-    private fun connectedOnSamsungAppsLab(context: Context) : Boolean {
-        val sp: SharedPreferences = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
-        val manager : WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?
-        Log.d("Testiranje", ""+manager?.connectionInfo?.bssid.toString())
-        return manager?.connectionInfo?.bssid.toString().toUpperCase(Locale.ROOT) == (sp.getString("routerMAC", "notSet") as String).toUpperCase(Locale.ROOT)
     }
 }

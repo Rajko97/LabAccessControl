@@ -51,7 +51,7 @@ class Notifications {
                         setSmallIcon(R.drawable.ic_notification_icon)
                         setContentTitle(applicationContext.getString(R.string.notification_title))
                         setContentText(applicationContext.getString(R.string.notification_device_approved))
-                        color = ResourcesCompat.getColor(mContext.resources, R.color.themeTextBlue, null)
+                        color = ResourcesCompat.getColor(applicationContext.resources, R.color.themeTextBlue, null)
                         priority = NotificationCompat.PRIORITY_DEFAULT
                         setAutoCancel(true)
                         setContentIntent(PendingIntent.getActivity(applicationContext, 1, Intent(applicationContext, StartActivity::class.java).putExtra("isNotificationIntent", true), PendingIntent.FLAG_UPDATE_CURRENT))

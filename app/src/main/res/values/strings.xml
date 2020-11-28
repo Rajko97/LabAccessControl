@@ -44,6 +44,9 @@
     <!--===                            Notifications                                ===-->
     <string name="notification_title">VTŠ Apps Team</string>
     <string name="notification_device_approved">Your device is approved. You may now use the application.</string>
+    <string name="notification_network_monitoring_title">Network monitoring...</string>
+    <string name="notification_network_monitoring_desc">You should hide this notification in notification settings</string>
+
     <!--===                            Notification channels                        ===-->
     <string name="notification_name_mac_change">MAC Change requests</string>
     <string name="notification_desc_mac_change">Notify me when administrator approve my device</string>

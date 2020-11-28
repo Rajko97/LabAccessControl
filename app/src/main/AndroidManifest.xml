@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-
     <application
         android:name=".Application"
         android:allowBackup="true"
@@ -62,6 +61,7 @@
         </service>
         <service android:name=".services.LabControlService"/>
         <service android:name=".services.ConnectivityListener"
+            android:enabled="true"
             android:process=":serviceNonStoppable"
             android:exported="false"
             android:description="@string/service_connectivity_desc"/>

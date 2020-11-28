@@ -1,15 +1,15 @@
 package com.vtsappsteam.labaccesscontrol.activities.main
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.AnticipateOvershootInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -27,10 +27,10 @@ import com.vtsappsteam.labaccesscontrol.activities.main.fragments.PresentMembers
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.LabControlFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.SettingsFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.TimeInLabFragment
-import com.vtsappsteam.labaccesscontrol.http.SocketIO
+import com.vtsappsteam.labaccesscontrol.services.ConnectivityListener
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
-import com.vtsappsteam.labaccesscontrol.services.utils.UnkillableServiceHelper
+import com.vtsappsteam.labaccesscontrol.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
@@ -68,7 +68,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             excludeTarget(android.R.id.statusBarBackground, true)
             excludeTarget(android.R.id.navigationBarBackground, true)
         }
-        UnkillableServiceHelper.startMyService(this@MainActivity)
+
+        val launchIntent = Intent(this@MainActivity, ConnectivityListener::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this@MainActivity.startForegroundService(launchIntent)
+        } else {
+            this@MainActivity.startService(launchIntent)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -157,13 +163,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun logOut() {
-        //getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
-        //applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
+        getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
+        applicationContext.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         window.exitTransition = null
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logoImage,
             ViewCompat.getTransitionName(logoImage)!!
         )
-        UnkillableServiceHelper.stopMyService(this@MainActivity)
+        this@MainActivity.sendBroadcast(Intent().apply {
+            putExtra("doorPermission", "false")
+            action = "ACTION_DOOR_PERMISSION_CHANGE"
+        })
         FirebaseMessagingService.disableFCM()
         startActivity(Intent(this@MainActivity, LoginActivity::class.java), options.toBundle())
         finish()

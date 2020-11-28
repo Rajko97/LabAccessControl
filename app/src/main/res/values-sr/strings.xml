@@ -51,6 +51,9 @@
     <string name="service_connectivity_desc">Ovaj  servis proverava konekciju da bi prikazao notifikaciju sa alatima za upravljanje laboratorijom</string>
     <string name="notification_name_hidden">Notifikacije za servise u pozadini</string>
     <string name="notification_desc_hidden">Ovo notifikacije treba da budu sakrivene</string>
+    <string name="notification_network_monitoring_title">Proveravam WIFI konekciju</string>
+    <string name="notification_network_monitoring_desc">Možete da sakrijete ovu notifikaciju u podešavanja obaveštenja</string>
+
 
     <!--===                         Lab Control                                   ====-->
     <string name="welcome_message">Dobrodošao u lab</string>
