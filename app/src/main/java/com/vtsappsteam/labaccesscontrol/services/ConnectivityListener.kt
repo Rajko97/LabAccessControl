@@ -137,7 +137,6 @@ class ConnectivityListener : Service() {
                     )
                 )
                 .setAutoCancel(false)
-                .setProgress(0, 0, true)
                 .setContentTitle(applicationContext.getString(R.string.notification_network_monitoring_title))
                 .setContentText(applicationContext.getString(R.string.notification_network_monitoring_desc))
                 .setOngoing(true)

@@ -27,18 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginStart="15dp" />
-        <TextView
-            android:id="@+id/tvNotificationStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tvNotificationTitle"
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/imgTextError"
+            android:layout_below="@id/tvNotificationTitle"
             android:layout_marginTop="5dp"
             android:layout_marginStart="15dp"
-            android:text=""
-            android:textColor="@color/themeTextGreen"
-            android:fontFamily="@font/exo_bold"
-            android:textSize="14sp"
-            android:maxLines="1"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -47,6 +43,7 @@
         android:layout_weight="0.3"
         android:gravity="center"
         android:orientation="horizontal">
+
         <LinearLayout
             android:id="@+id/ivNotificationImage"
             android:layout_width="wrap_content"

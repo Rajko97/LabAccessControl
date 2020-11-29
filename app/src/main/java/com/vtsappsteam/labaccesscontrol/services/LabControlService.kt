@@ -9,6 +9,7 @@ import android.graphics.*
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.IBinder
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -19,6 +20,7 @@ import com.vtsappsteam.labaccesscontrol.broadcast_receiver.NotificationReceiver
 import com.vtsappsteam.labaccesscontrol.http.SocketIO
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
+import io.socket.client.Socket
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
@@ -43,6 +45,18 @@ class LabControlService : Service() {
                 startForeground(531997, createNotification(message))
             }
         }
+
+        SocketIO.getSocket().on(Socket.EVENT_CONNECT) {
+            startForeground(531997, createNotification(getString(R.string.button_unlock)))
+        }
+
+        SocketIO.getSocket().on(Socket.EVENT_RECONNECT) {
+            startForeground(531997, createNotification(getString(R.string.button_unlock)))
+        }
+
+        SocketIO.getSocket().on(Socket.EVENT_DISCONNECT) {
+            startForeground(531997, createNotification(" ", true))
+        }
     }
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -50,7 +64,10 @@ class LabControlService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startMonitoring()
-        startForeground(531997, createNotification(getString(R.string.button_unlock)))
+        if(SocketIO.getSocket().connected())
+            startForeground(531997, createNotification(getString(R.string.button_unlock)))
+        else
+            startForeground(531997, createNotification(" ", true))
         return START_STICKY
     }
 
@@ -82,7 +99,7 @@ class LabControlService : Service() {
         }
     }
 
-    private fun createNotification(message : String) : Notification {
+    private fun createNotification(message : String, error : Boolean = false) : Notification {
         val remoteViews = RemoteViews(packageName, R.layout.lab_access_control_notification)
 
         //OpenActivity
@@ -94,8 +111,17 @@ class LabControlService : Service() {
         val clickPendingIntent = PendingIntent.getBroadcast(this, 0, clickIntent, 0)
         remoteViews.setOnClickPendingIntent(R.id.ivNotificationImage, clickPendingIntent)
 
-        remoteViews.setImageViewBitmap(R.id.tvNotificationTitle, textAsBitmap("Lab Access Control", 40f, getColor(R.color.themeTextBlue), R.font.exo_medium))
+        remoteViews.setImageViewBitmap(R.id.tvNotificationTitle, textAsBitmap(getString(R.string.notification_lab_access_control_title), 40f, getColor(R.color.themeTextBlue), R.font.exo_medium))
         remoteViews.setImageViewBitmap(R.id.imgTextButton, textAsBitmap(message, 35f, getColor(R.color.themeTextGray), R.font.exo_medium))
+
+        if(error) {
+            remoteViews.setImageViewBitmap(R.id.imgTextError, textAsBitmap(getString(R.string.notification_server_offline), 35f, getColor(R.color.notificationServerOffline), R.font.exo_medium))
+            remoteViews.setViewVisibility(R.id.imgTextError, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.ivNotificationImage, View.GONE)
+        } else {
+            remoteViews.setViewVisibility(R.id.imgTextError, View.GONE)
+            remoteViews.setViewVisibility(R.id.ivNotificationImage, View.VISIBLE)
+        }
 
         return NotificationCompat.Builder(this@LabControlService, Notifications.NotificationChannels.CHANNEL_CONTROL.channelId)
             .setSmallIcon(R.drawable.ic_notification_icon)

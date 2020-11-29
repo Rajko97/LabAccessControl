@@ -14,4 +14,5 @@
     <color name="btnRippleLightGrey">#3d3e42</color>
     <color name="placeholder_bg">#101010</color>
     <color name="colorTabFontGrey">#5f5f5f</color>
+    <color name="notificationServerOffline">#6C0404</color>
 </resources>

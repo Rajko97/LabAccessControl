@@ -53,7 +53,8 @@
     <string name="notification_desc_hidden">Ovo notifikacije treba da budu sakrivene</string>
     <string name="notification_network_monitoring_title">Proveravam WIFI konekciju</string>
     <string name="notification_network_monitoring_desc">Možete da sakrijete ovu notifikaciju u podešavanja obaveštenja</string>
-
+    <string name="notification_server_offline">Server trenutno nije dostupan!</string>
+    <string name="notification_lab_access_control_title">Lab Access Control</string>
 
     <!--===                         Lab Control                                   ====-->
     <string name="welcome_message">Dobrodošao u lab</string>

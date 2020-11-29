@@ -46,6 +46,8 @@
     <string name="notification_device_approved">Your device is approved. You may now use the application.</string>
     <string name="notification_network_monitoring_title">Network monitoring...</string>
     <string name="notification_network_monitoring_desc">You should hide this notification in notification settings</string>
+    <string name="notification_server_offline">Server is offline!</string>
+    <string name="notification_lab_access_control_title">Lab Access Control</string>
 
     <!--===                            Notification channels                        ===-->
     <string name="notification_name_mac_change">MAC Change requests</string>

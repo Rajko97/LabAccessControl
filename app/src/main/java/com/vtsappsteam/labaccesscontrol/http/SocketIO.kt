@@ -13,16 +13,12 @@ object SocketIO {
         try {
             socket = IO.socket(Constants.API_ADDRESS, opts.apply {
                 reconnection = true
-                reconnectionDelay = 500
-                timeout = 3000
+                reconnectionDelay = 1000
+                timeout = -1
             })
             socket.connect()
         } catch (e : URISyntaxException) {
             e.printStackTrace()
-        }
-
-        socket.on(Socket.EVENT_CONNECT) {
-            socket.emit("foo", "hi")
         }
     }
 
