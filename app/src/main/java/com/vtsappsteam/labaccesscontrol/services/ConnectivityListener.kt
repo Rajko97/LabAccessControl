@@ -16,6 +16,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
@@ -27,12 +28,13 @@ class ConnectivityListener : Service() {
     private var isOnNetwork : Boolean = false
     private lateinit var samsungAppsLabRouterMAC : String
     private lateinit var wifiManager : WifiManager
+    private lateinit var wakeLock : PowerManager.WakeLock
 
     private val networkCallbacks: ConnectivityManager.NetworkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onLost(network: Network) {
             super.onLost(network)
             isOnNetwork = false
-            stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
+            stopLabControlService()
         }
 
         override fun onAvailable(network: Network) {
@@ -42,7 +44,7 @@ class ConnectivityListener : Service() {
             if(wifiInfo.bssid.equals(samsungAppsLabRouterMAC, ignoreCase = true)) {
                 isOnNetwork = true
                 if(hasLabAccess) {
-                    startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                    startLabControlService()
                 }
             }
         }
@@ -54,10 +56,10 @@ class ConnectivityListener : Service() {
             if(newPermission == "true") {
                 hasLabAccess = true
                 if(isOnNetwork)
-                    startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                    startLabControlService()
             } else if(newPermission == "false") {
                 hasLabAccess = false
-                stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                stopLabControlService()
             }
         }
     }
@@ -73,12 +75,12 @@ class ConnectivityListener : Service() {
                     if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
                         isOnNetwork = true
                         if (hasLabAccess) {
-                            startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                            startLabControlService()
                         }
                     }
                 } else {
                     isOnNetwork = false
-                    stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                    stopLabControlService()
                 }
             }
         }
@@ -87,6 +89,11 @@ class ConnectivityListener : Service() {
     override fun onCreate() {
         if(::wifiManager.isInitialized.not()) {
             wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        }
+        if(::wakeLock.isInitialized.not()) {
+            wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "LabAccessControl::MyWakelockTag")
+            }
         }
         super.onCreate()
         registerReceiver(doorPermissionReceiver, IntentFilter("ACTION_DOOR_PERMISSION_CHANGE"))
@@ -115,7 +122,7 @@ class ConnectivityListener : Service() {
         if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
             isOnNetwork = true
             if (hasLabAccess) {
-                startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+                startLabControlService()
             }
         }
 
@@ -146,6 +153,16 @@ class ConnectivityListener : Service() {
                 .build()
         )
         return Service.START_STICKY
+    }
+
+    private fun startLabControlService() {
+        wakeLock.acquire()
+        startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+    }
+
+    private fun stopLabControlService() {
+        stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
+        wakeLock.release();
     }
 
     override fun onBind(intent: Intent?): IBinder? {
