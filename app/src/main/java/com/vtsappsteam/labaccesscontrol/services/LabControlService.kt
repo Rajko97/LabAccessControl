@@ -47,14 +47,17 @@ class LabControlService : Service() {
         }
 
         SocketIO.getSocket().on(Socket.EVENT_CONNECT) {
+            isUserInLab = false
             startForeground(531997, createNotification(getString(R.string.button_unlock)))
         }
 
         SocketIO.getSocket().on(Socket.EVENT_RECONNECT) {
+            isUserInLab = false
             startForeground(531997, createNotification(getString(R.string.button_unlock)))
         }
 
         SocketIO.getSocket().on(Socket.EVENT_DISCONNECT) {
+            isUserInLab = false
             startForeground(531997, createNotification(" ", true))
         }
     }
@@ -138,6 +141,7 @@ class LabControlService : Service() {
 
     override fun onDestroy() {
         job.cancel()
+        SocketIO.checkOut(userToken)
         super.onDestroy()
     }
 

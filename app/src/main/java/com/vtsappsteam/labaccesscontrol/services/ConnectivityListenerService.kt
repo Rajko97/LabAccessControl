@@ -23,7 +23,7 @@ import com.vtsappsteam.labaccesscontrol.broadcast_receiver.ConnectivityReceiver
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 
-class ConnectivityListener : Service() {
+class ConnectivityListenerService : Service() {
     private var hasLabAccess : Boolean = false
     private var isOnNetwork : Boolean = false
     private lateinit var samsungAppsLabRouterMAC : String
@@ -72,7 +72,7 @@ class ConnectivityListener : Service() {
                 val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
                 if (isGpsEnabled || isNetworkEnabled) {
-                    if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
+                    if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListenerService)) {
                         isOnNetwork = true
                         if (hasLabAccess) {
                             startLabControlService()
@@ -100,7 +100,7 @@ class ConnectivityListener : Service() {
         registerReceiver(locationSwitchReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val connectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkRequest = NetworkRequest.Builder()
@@ -119,7 +119,7 @@ class ConnectivityListener : Service() {
 
         connectivityManager.registerNetworkCallback(networkRequest, networkCallbacks)
 
-        if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListener)) {
+        if (ConnectivityReceiver.isConnectedOnSamsungAppsLab(this@ConnectivityListenerService)) {
             isOnNetwork = true
             if (hasLabAccess) {
                 startLabControlService()
@@ -133,13 +133,13 @@ class ConnectivityListener : Service() {
         startForeground(
             123456,
             NotificationCompat.Builder(
-                this@ConnectivityListener,
+                this@ConnectivityListenerService,
                 Notifications.NotificationChannels.CHANNEL_HIDDEN.channelId
             )
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setLargeIcon(
                     BitmapFactory.decodeResource(
-                        this@ConnectivityListener.resources,
+                        this@ConnectivityListenerService.resources,
                         R.mipmap.ic_launcher_foreground
                     )
                 )
@@ -157,12 +157,13 @@ class ConnectivityListener : Service() {
 
     private fun startLabControlService() {
         wakeLock.acquire()
-        startService(Intent(this@ConnectivityListener, LabControlService::class.java))
+        startService(Intent(this@ConnectivityListenerService, LabControlService::class.java))
     }
 
     private fun stopLabControlService() {
-        stopService(Intent(this@ConnectivityListener, LabControlService::class.java))
-        wakeLock.release();
+        stopService(Intent(this@ConnectivityListenerService, LabControlService::class.java))
+        if(wakeLock.isHeld)
+            wakeLock.release()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

@@ -18,16 +18,19 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.transition.Fade
 import com.google.android.material.navigation.NavigationView
 import com.rupins.drawercardbehaviour.CardDrawerLayout
 import com.vtsappsteam.labaccesscontrol.R
 import com.vtsappsteam.labaccesscontrol.activities.login.ui.LoginActivity
-import com.vtsappsteam.labaccesscontrol.activities.main.fragments.PresentMembersFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.LabControlFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.SettingsFragment
 import com.vtsappsteam.labaccesscontrol.activities.main.fragments.TimeInLabFragment
-import com.vtsappsteam.labaccesscontrol.services.ConnectivityListener
+import com.vtsappsteam.labaccesscontrol.activities.main.fragments.presentmembers.MemberData
+import com.vtsappsteam.labaccesscontrol.activities.main.fragments.presentmembers.PresentMembersFragment
+import com.vtsappsteam.labaccesscontrol.services.ConnectivityListenerService
 import com.vtsappsteam.labaccesscontrol.services.FirebaseMessagingService
 import com.vtsappsteam.labaccesscontrol.services.utils.Notifications
 import com.vtsappsteam.labaccesscontrol.utils.Constants
@@ -49,13 +52,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(appToolbar)
         setNavigationDrawers()
 
+        val viewModel: MainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.presentMembersCount.observe(this, Observer<Int?> {
+            (nav_view.menu.findItem(R.id.nav_current_in_lab).actionView as TextView).text = if(it == null) "" else "$it"
+        })
+
         fragmentHome = LabControlFragment()
         fragmentCurrentInLab = PresentMembersFragment()
         fragmentTimeInLab = TimeInLabFragment()
         fragmentSettings = SettingsFragment()
 
-        if(savedInstanceState == null)
+        if(savedInstanceState == null) {
             setFragmentByChosenItem(R.id.nav_home_page)
+        }
 
         Notifications.cancelApprovedDeviceNotification(this)
         val decor = window.decorView
@@ -69,7 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             excludeTarget(android.R.id.navigationBarBackground, true)
         }
 
-        val launchIntent = Intent(this@MainActivity, ConnectivityListener::class.java)
+        val launchIntent = Intent(this@MainActivity, ConnectivityListenerService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             this@MainActivity.startForegroundService(launchIntent)
         } else {
@@ -97,7 +106,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.menu.getItem(0).isChecked = true
-        (nav_view.menu.findItem(R.id.nav_current_in_lab).actionView as TextView).text = "10"
 
         drawer!!.setViewScale(Gravity.START, 0.9f)
         //drawer!!.setRadius(Gravity.START, 35f) //this creates graphic glitch on dark background

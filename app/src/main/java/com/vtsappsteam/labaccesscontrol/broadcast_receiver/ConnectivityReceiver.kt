@@ -61,7 +61,7 @@ class ConnectivityReceiver(private var connectivityReceiverListener: Connectivit
         fun isConnectedOnSamsungAppsLab(context: Context) : Boolean {
             val sp: SharedPreferences = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
             val manager : WifiManager? = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?
-            return manager?.connectionInfo?.bssid.toString().toUpperCase(Locale.ROOT) == (sp.getString("routerMAC", "notSet") as String).toUpperCase(Locale.ROOT)
+            return manager?.connectionInfo?.bssid.toString().equals((sp.getString("routerMAC", "notSet") as String), ignoreCase = true)
         }
 
         @SuppressLint("HardwareIds")

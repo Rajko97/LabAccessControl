@@ -63,7 +63,7 @@
             </intent-filter>
         </service>
         <service android:name=".services.LabControlService"/>
-        <service android:name=".services.ConnectivityListener"
+        <service android:name=".services.ConnectivityListenerService"
             android:enabled="true"
             android:process=":serviceNonStoppable"
             android:exported="false"

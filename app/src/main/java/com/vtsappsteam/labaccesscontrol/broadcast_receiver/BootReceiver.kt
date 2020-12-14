@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.vtsappsteam.labaccesscontrol.services.ConnectivityListener
+import com.vtsappsteam.labaccesscontrol.services.ConnectivityListenerService
 import com.vtsappsteam.labaccesscontrol.utils.Constants
 
 class BootReceiver : BroadcastReceiver() {
@@ -12,7 +12,7 @@ class BootReceiver : BroadcastReceiver() {
         if (Intent.ACTION_BOOT_COMPLETED == intent?.action) {
            val sp = context?.applicationContext?.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE)
             if (sp?.getString("doorPermission", "login") == "true") {
-                val launchIntent = Intent(context, ConnectivityListener::class.java)
+                val launchIntent = Intent(context, ConnectivityListenerService::class.java)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(launchIntent)
                 } else {
